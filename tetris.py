@@ -1,6 +1,8 @@
 import pygame
 from copy import deepcopy
 from random import choice, randrange
+from player import random_player
+from player import Move
 
 W, H = 10, 20
 TILE = 45
@@ -70,6 +72,9 @@ def set_record(record, score):
     with open('record', 'w') as f:
         f.write(str(rec))
 
+play = random_player(38943)
+last_move = 0
+timing = 600
 
 while True:
     record = get_record()
@@ -84,7 +89,7 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()
-        if event.type == pygame.KEYDOWN:
+        """if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 dx = -1
             elif event.key == pygame.K_RIGHT:
@@ -92,7 +97,20 @@ while True:
             elif event.key == pygame.K_DOWN:
                 anim_limit = 100
             elif event.key == pygame.K_UP:
-                rotate = True
+                rotate = True"""
+    now = pygame.time.get_ticks()
+    if now - last_move >= timing:
+        last_move = now
+        choice = play.get_move()
+
+        if choice == Move.LEFT:
+            dx = -1
+        elif choice == Move.RIGHT:
+            dx = 1
+        elif choice == Move.DOWN:
+            anim_limit = 100
+        elif choice == Move.UP:
+            rotate = True
     # move x
     figure_old = deepcopy(figure)
     for i in range(4):
