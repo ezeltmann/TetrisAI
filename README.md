@@ -1,2 +1,3 @@
-# TetrisAI
-This is a fork from https://github.com/greerviau/TetrisAI to play around with, typically with students.
+# Python-Tetris
+Tetris using Python and Pygame
+https://github.com/StanislavPetrovV/Python-Tetris
