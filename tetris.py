@@ -200,7 +200,8 @@ while True:
             if col:
                 figure_rect.x, figure_rect.y = x * TILE, y * TILE
                 pygame.draw.rect(game_sc, col, figure_rect)
-    print(f"CurrentField: {field}")
+    
+    #print(f"CurrentField: {field}")
     ## AI Eyes Output
     """
     picture = []
@@ -214,13 +215,35 @@ while True:
         picture.append(col_pic)
     print(f"AI Image: {picture}")
     """
-    
+
     # draw next figure
-    #print(f"Next Figure: {next_figure}")
+    print(f"Next Figure: {next_figure}")
     for i in range(4):
         figure_rect.x = next_figure[i].x * TILE + 380
         figure_rect.y = next_figure[i].y * TILE + 185
         pygame.draw.rect(sc, next_color, figure_rect)
+    
+    block_list = []
+    for i in range(4):
+        x,y = next_figure[i].x, next_figure[i].y
+        block_list.append((x-4, y))
+    
+    next_fig_picture = []
+    for i in range(4):
+        next_fig_picture_row = []
+        for j in range(4):
+            has_block = False
+            for pos in block_list:
+                if (pos[1] == i and pos[0] == j):
+                    has_block = True
+            if (has_block):
+                next_fig_picture_row.append(1)
+            else:
+                next_fig_picture_row.append(0)
+        next_fig_picture.append(next_fig_picture_row)
+
+    print(f"Next Figure = {next_fig_picture}")
+
     # draw titles
     sc.blit(title_tetris, (485, -10))
     sc.blit(title_score, (535, 780))

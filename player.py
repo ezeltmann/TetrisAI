@@ -22,7 +22,13 @@ class AiPlayer():
 
     def set_next_piece(self):
         pass
-        
+    
+    def set_score(self):
+        pass
+
+    def set_current_piece(self):
+        pass
+    
 
 
 class random_player():
