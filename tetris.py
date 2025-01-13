@@ -8,7 +8,7 @@ W, H = 10, 20
 TILE = 45
 GAME_RES = W * TILE, H * TILE
 RES = 750, 940
-FPS = 60
+FPS = 600
 
 pygame.init()
 sc = pygame.display.set_mode(RES)
@@ -18,12 +18,39 @@ clock = pygame.time.Clock()
 grid = [pygame.Rect(x * TILE, y * TILE, TILE, TILE) for x in range(W) for y in range(H)]
 
 figures_pos = [[(-1, 0), (-2, 0), (0, 0), (1, 0)],
+                 #  
+                 #  XXXX
+                 #
                [(0, -1), (-1, -1), (-1, 0), (0, 0)],
+                 #
+                 #   XX
+                 #   XX
+                 #
                [(-1, 0), (-1, 1), (0, 0), (0, -1)],
+                 #
+                 #   X
+                 #   XX
+                 #    X
                [(0, 0), (-1, 0), (0, 1), (-1, -1)],
+                 #
+                 #   X
+                 #  XX
+                 #  X
                [(0, 0), (0, -1), (0, 1), (-1, -1)],
+                 #
+                 #    X
+                 #    X
+                 #   XX
                [(0, 0), (0, -1), (0, 1), (1, -1)],
+                 #
+                 #   X
+                 #   X
+                 #   XX
                [(0, 0), (0, -1), (0, 1), (-1, 0)]]
+                 #
+                 #   X 
+                 #  XX
+                 #   X
 
 figures = [[pygame.Rect(x + W // 2, y + 1, 1, 1) for x, y in fig_pos] for fig_pos in figures_pos]
 figure_rect = pygame.Rect(0, 0, TILE - 2, TILE - 2)
@@ -74,7 +101,7 @@ def set_record(record, score):
 
 play = random_player(38943)
 last_move = 0
-timing = 600
+timing = (FPS/60)
 
 while True:
     record = get_record()
@@ -101,15 +128,15 @@ while True:
     now = pygame.time.get_ticks()
     if now - last_move >= timing:
         last_move = now
-        choice = play.get_move()
+        move_choice = play.get_move()
 
-        if choice == Move.LEFT:
+        if move_choice == Move.LEFT:
             dx = -1
-        elif choice == Move.RIGHT:
+        elif move_choice == Move.RIGHT:
             dx = 1
-        elif choice == Move.DOWN:
+        elif move_choice == Move.DOWN:
             anim_limit = 100
-        elif choice == Move.UP:
+        elif move_choice == Move.UP:
             rotate = True
     # move x
     figure_old = deepcopy(figure)
@@ -159,6 +186,7 @@ while True:
             lines += 1
     # compute score
     score += scores[lines]
+    print(f"Current Score: {score}")
     # draw grid
     [pygame.draw.rect(game_sc, (40, 40, 40), i_rect, 1) for i_rect in grid]
     # draw figure
@@ -172,7 +200,23 @@ while True:
             if col:
                 figure_rect.x, figure_rect.y = x * TILE, y * TILE
                 pygame.draw.rect(game_sc, col, figure_rect)
+    print(f"CurrentField: {field}")
+    ## AI Eyes Output
+    """
+    picture = []
+    for y, raw in enumerate(field):
+        col_pic = []        
+        for x, col in enumerate(raw):
+            if col:
+                col_pic.append(1)
+            else:
+                col_pic.append(0)
+        picture.append(col_pic)
+    print(f"AI Image: {picture}")
+    """
+    
     # draw next figure
+    #print(f"Next Figure: {next_figure}")
     for i in range(4):
         figure_rect.x = next_figure[i].x * TILE + 380
         figure_rect.y = next_figure[i].y * TILE + 185

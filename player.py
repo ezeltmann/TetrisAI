@@ -10,6 +10,20 @@ class Move(Enum):
     UP = 3
     DOWN = 4
 
+class AiPlayer():
+    def __init__(self):
+        pass
+
+    def get_move(self):
+        pass
+
+    def set_board_state(self):
+        pass
+
+    def set_next_piece(self):
+        pass
+        
+
 
 class random_player():
     def __init__(self,seed=0):
