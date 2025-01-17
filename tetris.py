@@ -1,4 +1,5 @@
 import pygame
+import os
 from copy import deepcopy
 from random import choice, randrange
 from player import random_player
@@ -57,6 +58,10 @@ figure_rect = pygame.Rect(0, 0, TILE - 2, TILE - 2)
 field = [[0 for i in range(W)] for j in range(H)]
 
 anim_count, anim_speed, anim_limit = 0, 60, 2000
+
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
 
 bg = pygame.image.load('img/bg.jpg').convert()
 game_bg = pygame.image.load('img/bg2.jpg').convert()
@@ -223,6 +228,7 @@ while True:
         figure_rect.y = next_figure[i].y * TILE + 185
         pygame.draw.rect(sc, next_color, figure_rect)
     
+    """
     block_list = []
     for i in range(4):
         x,y = next_figure[i].x, next_figure[i].y
@@ -243,6 +249,7 @@ while True:
         next_fig_picture.append(next_fig_picture_row)
 
     print(f"Next Figure = {next_fig_picture}")
+    """
 
     # draw titles
     sc.blit(title_tetris, (485, -10))
