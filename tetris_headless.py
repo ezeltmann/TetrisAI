@@ -10,6 +10,41 @@ from rng_handle.rand_inter import ControlledRNG
 from player import random_player
 from player import Move
 
+class Tetris():
+    def __init__(self):
+        self.W=10
+        self.H=20
+        self.field=[[0 for i in range(self.W)] for j in range(self.H)]
+
+    def check_borders(self,figure,i,field):
+        if figure[i].x < 0 or figure[i].x > self.W - 1:
+            return False
+        elif figure[i].y > self.H - 1 or field[figure[i].y][figure[i].x]:
+            return False
+        return True
+
+
+    def get_record():
+        try:
+            with open('record') as f:
+                return f.readline()
+        except FileNotFoundError:
+            with open('record', 'w') as f:
+                f.write('0')
+
+
+    def set_record(record, score):
+        rec = max(int(record), score)
+        with open('record', 'w') as f:
+            f.write(str(rec))
+    
+    def play_tetris(self):
+        still_playing = True
+        while still_playing:
+            for i in range(self.W):
+                if self.field[0][i]:
+                    self.set_record(record, score)
+                    still_playing = False
 
 
 W, H = 10, 20
@@ -70,27 +105,7 @@ score, lines = 0, 0
 scores = {0: 0, 1: 100, 2: 300, 3: 700, 4: 1500}
 
 
-def check_borders():
-    if figure[i].x < 0 or figure[i].x > W - 1:
-        return False
-    elif figure[i].y > H - 1 or field[figure[i].y][figure[i].x]:
-        return False
-    return True
 
-
-def get_record():
-    try:
-        with open('record') as f:
-            return f.readline()
-    except FileNotFoundError:
-        with open('record', 'w') as f:
-            f.write('0')
-
-
-def set_record(record, score):
-    rec = max(int(record), score)
-    with open('record', 'w') as f:
-        f.write(str(rec))
 
 play = random_player(ControlledRNG())
 last_move = 0
@@ -208,11 +223,7 @@ while True:
     
     # draw titles
     # game over
-    for i in range(W):
-        if field[0][i]:
-            print(score)
-            set_record(record, score)
-            exit()
+
             #field = [[0 for i in range(W)] for i in range(H)]
             #anim_count, anim_speed, anim_limit = 0, 60, 2000
             #score = 0
