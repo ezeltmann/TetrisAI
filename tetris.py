@@ -1,7 +1,8 @@
 import pygame
 import os
 from copy import deepcopy
-from random import choice, randrange
+from rng_handle.rand_inter import ControlledRNG
+#from random import choice, randrange
 from player import random_player
 from player import Move
 
@@ -10,6 +11,9 @@ TILE = 45
 GAME_RES = W * TILE, H * TILE
 RES = 750, 940
 FPS = 600
+
+# Set Random Seed before working with this system
+rnd = ControlledRNG()
 
 pygame.init()
 sc = pygame.display.set_mode(RES)
@@ -73,9 +77,9 @@ title_tetris = main_font.render('TETRIS', True, pygame.Color('darkorange'))
 title_score = font.render('score:', True, pygame.Color('green'))
 title_record = font.render('record:', True, pygame.Color('purple'))
 
-get_color = lambda : (randrange(30, 256), randrange(30, 256), randrange(30, 256))
+get_color = lambda : (rnd.randrange(30, 256), rnd.randrange(30, 256), rnd.randrange(30, 256))
 
-figure, next_figure = deepcopy(choice(figures)), deepcopy(choice(figures))
+figure, next_figure = deepcopy(rnd.choice(figures)), deepcopy(rnd.choice(figures))
 color, next_color = get_color(), get_color()
 
 score, lines = 0, 0
@@ -104,7 +108,7 @@ def set_record(record, score):
     with open('record', 'w') as f:
         f.write(str(rec))
 
-play = random_player(38943)
+play = random_player(ControlledRNG())
 last_move = 0
 timing = (FPS/60)
 
@@ -161,7 +165,7 @@ while True:
                 for i in range(4):
                     field[figure_old[i].y][figure_old[i].x] = color
                 figure, color = next_figure, next_color
-                next_figure, next_color = deepcopy(choice(figures)), get_color()
+                next_figure, next_color = deepcopy(rnd.choice(figures)), get_color()
                 anim_limit = 2000
                 break
     # rotate
@@ -191,13 +195,15 @@ while True:
             lines += 1
     # compute score
     score += scores[lines]
-    print(f"Current Score: {score}")
+    #print(f"Current Score: {score}")
     # draw grid
     [pygame.draw.rect(game_sc, (40, 40, 40), i_rect, 1) for i_rect in grid]
     # draw figure
+    current_fig = []
     for i in range(4):
         figure_rect.x = figure[i].x * TILE
         figure_rect.y = figure[i].y * TILE
+        current_fig.append((figure[i].x,figure[i].y))
         pygame.draw.rect(game_sc, color, figure_rect)
     # draw field
     for y, raw in enumerate(field):
@@ -208,21 +214,26 @@ while True:
     
     #print(f"CurrentField: {field}")
     ## AI Eyes Output
-    """
     picture = []
     for y, raw in enumerate(field):
         col_pic = []        
         for x, col in enumerate(raw):
-            if col:
-                col_pic.append(1)
-            else:
-                col_pic.append(0)
+            skip = False
+            for coord in current_fig:
+                if (x == coord[0] and y == coord[1]):
+                    col_pic.append(2)
+                    skip = True
+            if (not skip):
+                if col:
+                    col_pic.append(1)
+                else:
+                    col_pic.append(0)
         picture.append(col_pic)
     print(f"AI Image: {picture}")
-    """
+    print(f"Field = {field}")
 
     # draw next figure
-    print(f"Next Figure: {next_figure}")
+    # print(f"Next Figure: {next_figure}")
     for i in range(4):
         figure_rect.x = next_figure[i].x * TILE + 380
         figure_rect.y = next_figure[i].y * TILE + 185

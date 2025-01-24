@@ -2,7 +2,7 @@
 This class is to implement a player for the tetris piece so that we can use it to run simulations of what is happening.
 """
 from enum import Enum
-import random
+from rng_handle.rand_inter import RandomNumberInterface
 
 class Move(Enum):
     LEFT = 1
@@ -26,17 +26,13 @@ class AiPlayer():
     def set_score(self):
         pass
 
-    def set_current_piece(self):
-        pass
-    
 
 
 class random_player():
-    def __init__(self,seed=0):
-        if not seed == 0:
-            random.seed(seed)
+    def __init__(self, rng_provider: RandomNumberInterface):
+        self.rnd = rng_provider
     
     def get_move(self):
-        num = random.randrange(3) + 1
+        num = self.rnd.randrange(0,3) + 1
         return Move(num)
 
