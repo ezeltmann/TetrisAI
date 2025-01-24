@@ -99,25 +99,6 @@ last_move = 0
 while True:
     record = get_record()
     dx, rotate = 0, False
-    # delay for full lines
-    #for i in range(lines):
-    #    pygame.time.wait(200)
-    # control
-    #for event in pygame.event.get():
-    #    if event.type == pygame.QUIT:
-    #        exit()
-    """if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                dx = -1
-            elif event.key == pygame.K_RIGHT:
-                dx = 1
-            elif event.key == pygame.K_DOWN:
-                anim_limit = 100
-            elif event.key == pygame.K_UP:
-                rotate = True"""
-    #now = pygame.time.get_ticks()
-#    if now - last_move >= timing:
-#        last_move = now
     move_choice = play.get_move()
 
     if move_choice == Move.LEFT:
@@ -128,6 +109,7 @@ while True:
         pass
     elif move_choice == Move.UP:
         rotate = True
+
     # move x
     figure_old = deepcopy(figure)
     for i in range(4):
@@ -223,7 +205,7 @@ while True:
         next_fig_picture.append(next_fig_picture_row)
 
     print(f"Next Figure = {next_fig_picture}")
-
+    
     # draw titles
     # game over
     for i in range(W):
