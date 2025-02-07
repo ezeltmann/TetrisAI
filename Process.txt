@@ -1,0 +1,12 @@
+# of NN Players (assuming 200 to start)
+    Put players with Games of Tetris (Headless one)
+        Have them play
+        Until They Lose Some Number of times (1 or more)
+        Take the best 20%
+        Create a new generation
+        Start again
+
+    Take the best NN and write it to a file (that can be loaded again)
+
+Use the NN file to play tetris on its own (with graphics)
+
