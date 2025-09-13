@@ -2,12 +2,13 @@
 This is the implementation of a "headless" tetris, wherein the game can be played without showing the specific results.
 Specifically this will allow us to do all of the ai testing without actually having to watch the games play out.
 """
-import os
+#import os
 from tetris_helpers.coord import Coord
 from copy import deepcopy
-from random import choice, randrange
+from random import choice 
+#from random import randrange
 from player import random_player
-from player import Move
+from tetris_helpers.move import Move
 
 class Tetris():
     def __init__(self):
@@ -49,7 +50,7 @@ class Tetris():
                                 #   X 
                                 #  XX
                                 #   X
-        self.figures = [[Coord(x + self.W // 2, y + 1) for x, y in fig_pos] for fig_pos in figures_pos]
+        self.figures = [[Coord(x + self.W // 2, y + 1) for x, y in fig_pos] for fig_pos in self.figures_pos]
         self.field = [[0 for i in range(self.W)] for j in range(self.H)]    
     
 
@@ -61,7 +62,7 @@ class Tetris():
         return True
 
 
-    def get_record():
+    def get_record(self):
         try:
             with open('record') as f:
                 return f.readline()
@@ -70,7 +71,7 @@ class Tetris():
                 f.write('0')
 
 
-    def set_record(record, score):
+    def set_record(self, record, score):
         rec = max(int(record), score)
         with open('record', 'w') as f:
             f.write(str(rec))
@@ -96,10 +97,10 @@ class Tetris():
         figure_old = deepcopy(figure)
         for i in range(4):
             figure[i].y += 1
-            if not self.check_borders(figure, i, field):
+            if not self.check_borders(figure, i, field):  #not
                 for i in range(4):
                     field[figure_old[i].y][figure_old[i].x] = 1
-                figure = next_figure
+                figure = self.next_figure
                 self.next_figure = deepcopy(choice(self.figures))
                 break
 
@@ -130,18 +131,32 @@ class Tetris():
                 lines += 1                    
         return self.scores[lines]
 
-    def play_tetris(self):
+    def make_move(self, move, figure):
+        if (move == Move.DOWN):
+            pass
+        elif (move == Move.UP):
+            self.rotate(figure, self.field)
+        elif (move == Move.LEFT):
+            self.move_x(figure, -1, self.field)
+        elif (move == Move.RIGHT):
+            self.move_x(figure, 1, self.field)
+        else: #No Move made
+            pass
+        
+
+    def play_tetris(self, player):
         still_playing = True
         score = 0
-        figure, next_figure = deepcopy(choice(figures)), deepcopy(choice(figures))
+        figure, self.next_figure = deepcopy(choice(self.figures)), deepcopy(choice(self.figures))
         record = self.get_record()
             
         while still_playing:
+                        
+            move = player.get_move()
+            self.make_move(move, figure)
+            self.move_y(figure, self.field)
             
-            dx, rotate = 0, False
-                            
-            
-            score += self.compute_score(field)
+            score += self.compute_score(self.field)
             #Check for End of Game
             if (self.is_game_over()):
                 self.set_record(record, score)
@@ -149,17 +164,14 @@ class Tetris():
 
 
 
-
-
-
-figure, next_figure = deepcopy(choice(figures)), deepcopy(choice(figures))
-
-score, lines = 0, 0
-scores = {0: 0, 1: 100, 2: 300, 3: 700, 4: 1500}
+tet = Tetris()
+player = random_player()
+tet.play_tetris(player)
 
 
 
 
+"""
 play = random_player(ControlledRNG())
 last_move = 0
 #timing = (FPS/60)
@@ -183,6 +195,8 @@ while True:
         current_fig.append((figure[i].x,figure[i].y))
     #print(f"CurrentField: {field}")
     ## AI Eyes Output
+"""   
+"""
     picture = []
     for y, raw in enumerate(field):
         col_pic = []        
@@ -226,7 +240,7 @@ while True:
         next_fig_picture.append(next_fig_picture_row)
 
     print(f"Next Figure = {next_fig_picture}")
-    
+   """ 
     # draw titles
     # game over
 

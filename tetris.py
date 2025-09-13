@@ -108,7 +108,7 @@ def set_record(record, score):
     with open('record', 'w') as f:
         f.write(str(rec))
 
-play = random_player(ControlledRNG())
+play = random_player()
 last_move = 0
 timing = (FPS/60)
 

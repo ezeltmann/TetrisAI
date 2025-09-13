@@ -1,14 +1,8 @@
 """
 This class is to implement a player for the tetris piece so that we can use it to run simulations of what is happening.
 """
-from enum import Enum
-from rng_handle.rand_inter import RandomNumberInterface
-
-class Move(Enum):
-    LEFT = 1
-    RIGHT = 2
-    UP = 3
-    DOWN = 4
+from tetris_helpers.move import Move
+from random import randrange
 
 class AiPlayer():
     def __init__(self):
@@ -28,11 +22,8 @@ class AiPlayer():
 
 
 
-class random_player():
-    def __init__(self, rng_provider: RandomNumberInterface):
-        self.rnd = rng_provider
-    
+class random_player():   
     def get_move(self):
-        num = self.rnd.randrange(0,3) + 1
+        num = randrange(0,3) + 1
         return Move(num)
 
